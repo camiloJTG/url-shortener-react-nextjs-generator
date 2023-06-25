@@ -1,7 +1,11 @@
-import ShortenerForm from '@/components/forms/shortenerForm';
+import Home from '@/components/container/home';
 
 const Generator = () => {
-   return <ShortenerForm />;
+   return (
+      <div>
+         <Home />
+      </div>
+   );
 };
 
 export default Generator;
