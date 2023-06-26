@@ -13,8 +13,14 @@ export const useForm = () => {
       const formData = new FormData(form);
       const values: useFormFields = {};
       formData.forEach((value, key) => (values[key] = value.toString()));
-      return { url: values['url'].toString() };
+      return { url: values['url'].toString().trim() };
    };
 
-   return { formRef, getFormValues };
+   const cleanForm = () => {
+      const form = formRef.current;
+      if (!form) return;
+      form.reset();
+   };
+
+   return { formRef, getFormValues, cleanForm };
 };

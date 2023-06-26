@@ -15,6 +15,7 @@ const RegisterShortener = ({ onRef, onSubmit }: RegisterShortener) => {
                className='shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-300 ease-in-out'
                type='url'
                placeholder='Enter a valid URL'
+               required
             />
          </div>
 

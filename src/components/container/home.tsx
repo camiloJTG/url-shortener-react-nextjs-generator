@@ -2,16 +2,17 @@
 
 import { FormEvent, useState } from 'react';
 import Navbar from '@/components/common/navbar';
-import RegisterShortener from '@/components/forms/registerShortener';
+import Modal from '@/components/common/modal';
 import Hero from '@/components/common/hero';
+import RegisterShortener from '@/components/forms/registerShortener';
 import { useForm } from '@/hooks/useForm';
 import { generateUrlShortener } from '@/services/shortener';
-import { Shortener } from '@/types/interfaces';
 
+import { Shortener } from '@/types/interfaces';
 const ShortenerContainer = () => {
-   const { formRef, getFormValues } = useForm();
+   const { formRef, getFormValues, cleanForm } = useForm();
    const [shortener, setShortener] = useState<Shortener>();
-   const [error, setError] = useState<string | undefined>('');
+   const [openModal, setOpenModal] = useState<boolean>(false);
 
    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -19,7 +20,15 @@ const ShortenerContainer = () => {
       if (!formValues) return null;
       const result = await generateUrlShortener(formValues.url);
 
-      typeof result === 'object' ? setShortener(result) : setError(result);
+      if (typeof result === 'object') {
+         setShortener(result);
+         setOpenModal(true);
+      }
+   };
+
+   const handleCloseModal = () => {
+      setOpenModal(false);
+      cleanForm();
    };
 
    return (
@@ -39,6 +48,11 @@ const ShortenerContainer = () => {
                />
             </div>
          </div>
+         <Modal
+            shortenedUrl={shortener?.shortenedUrl}
+            onClose={handleCloseModal}
+            open={openModal}
+         />
       </div>
    );
 };

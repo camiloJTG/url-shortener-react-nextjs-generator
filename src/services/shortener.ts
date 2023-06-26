@@ -4,9 +4,7 @@ import { registerShortener } from '@/types/schemas/shortener';
 
 const { shortener } = apiConfig;
 
-export const generateUrlShortener = async (
-   url: string
-): Promise<string | Shortener | undefined> => {
+export const generateUrlShortener = async (url: string) => {
    try {
       await registerShortener.validate({ url }, { abortEarly: true });
 
@@ -28,6 +26,6 @@ export const generateUrlShortener = async (
          return message;
       }
    } catch (error: any) {
-      return error.message;
+      throw error;
    }
 };
