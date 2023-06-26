@@ -1,19 +1,25 @@
 'use client';
 
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import Navbar from '@/components/common/navbar';
 import RegisterShortener from '@/components/forms/registerShortener';
 import Hero from '@/components/common/hero';
 import { useForm } from '@/hooks/useForm';
+import { generateUrlShortener } from '@/services/shortener';
+import { Shortener } from '@/types/interfaces';
 
 const ShortenerContainer = () => {
    const { formRef, getFormValues } = useForm();
+   const [shortener, setShortener] = useState<Shortener>();
+   const [error, setError] = useState<string | undefined>('');
 
-   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formValues = getFormValues();
       if (!formValues) return null;
-      // call services
+      const result = await generateUrlShortener(formValues.url);
+
+      typeof result === 'object' ? setShortener(result) : setError(result);
    };
 
    return (

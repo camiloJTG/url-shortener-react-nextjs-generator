@@ -1,4 +1,4 @@
-import { RegisterShortener } from '@/types/interfaces/components';
+import { RegisterShortener } from '@/types/interfaces';
 
 const RegisterShortener = ({ onRef, onSubmit }: RegisterShortener) => {
    return (
