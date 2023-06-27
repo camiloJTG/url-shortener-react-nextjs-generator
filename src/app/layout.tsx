@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-   title: 'Url shortener',
+   title: 'URL shortener',
    description: 'Website in charge of generating shortened urls'
 };
 
