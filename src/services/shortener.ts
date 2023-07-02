@@ -4,7 +4,7 @@ import { registerShortener } from '@/types/schemas/shortener';
 
 const { shortener } = apiConfig;
 
-export const generateUrlShortener = async (url: string) => {
+export const generateUrlShortener = async (url: string, token: string) => {
    try {
       await registerShortener.validate({ url }, { abortEarly: true });
 
@@ -13,7 +13,7 @@ export const generateUrlShortener = async (url: string) => {
          headers: {
             'Content-Type': 'application/json'
          },
-         body: JSON.stringify({ url })
+         body: JSON.stringify({ url, recaptchaToken: token })
       });
 
       if (resp.ok) {

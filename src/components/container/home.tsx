@@ -1,34 +1,43 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import Navbar from '@/components/common/navbar';
 import Modal from '@/components/common/modal';
 import Hero from '@/components/common/hero';
 import RegisterShortener from '@/components/forms/registerShortener';
 import { useForm } from '@/hooks/useForm';
-import { generateUrlShortener } from '@/services/shortener';
 import { Shortener } from '@/types/interfaces';
+import { generateUrlShortener } from '@/services/shortener';
 
 const ShortenerContainer = () => {
    const { formRef, getFormValues, cleanForm } = useForm();
    const [shortener, setShortener] = useState<Shortener | string>();
    const [openModal, setOpenModal] = useState<boolean>(false);
    const [notification, setNotification] = useState<boolean>(false);
+   const { executeRecaptcha } = useGoogleReCaptcha();
 
-   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const formValues = getFormValues();
-      if (!formValues) return null;
-      const result = await generateUrlShortener(formValues.url);
-      if (typeof result === 'object') {
-         setShortener(result);
-         setOpenModal(true);
-      }
-      if (typeof result === 'string' || typeof result === 'undefined') {
-         setShortener(result);
-         setNotification(true);
-      }
-   };
+   const handleSubmit = useCallback(
+      async (e: FormEvent<HTMLFormElement>) => {
+         e.preventDefault();
+
+         if (!executeRecaptcha) return;
+         const recaptchaToken = await executeRecaptcha('enquiryFormSubmit');
+
+         const formValues = getFormValues();
+         if (!formValues) return null;
+         const result = await generateUrlShortener(formValues.url, recaptchaToken);
+         if (typeof result === 'object') {
+            setShortener(result);
+            setOpenModal(true);
+         }
+         if (typeof result === 'string' || typeof result === 'undefined') {
+            setShortener(result);
+            setNotification(true);
+         }
+      },
+      [executeRecaptcha]
+   );
 
    const handleCloseModal = () => {
       setOpenModal(false);
