@@ -9,4 +9,5 @@ export interface DisplayModal {
    shortenedUrl: string | undefined;
    open: boolean;
    onClose: () => void;
+   onCloseNotification: () => void;
 }

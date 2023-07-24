@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 import { DisplayModal } from '@/types/interfaces';
 
-const Modal = ({ onClose, open, shortenedUrl }: DisplayModal) => {
+const Modal = ({ onClose, open, shortenedUrl, onCloseNotification }: DisplayModal) => {
    const handleOnCloseModal = (e: MouseEvent<HTMLDivElement>) => {
       const target = e.target as HTMLDivElement;
       if (target.id === 'mainModal') onClose();
@@ -10,6 +10,7 @@ const Modal = ({ onClose, open, shortenedUrl }: DisplayModal) => {
    const handleCopyUrl = () => {
       navigator.clipboard.writeText(shortenedUrl!);
       onClose();
+      onCloseNotification();
    };
 
    if (!open) return;
