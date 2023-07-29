@@ -1,6 +1,6 @@
 export interface Shortener {
    id?: string;
-   originalUrl: string;
+   originalUrl?: string;
    shortenedUrl?: string;
 }
 
